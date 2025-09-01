@@ -1,0 +1,112 @@
+import torch 
+import torch.nn as nn
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from torch.utils.data import Dataset
+data=pd.read_csv('diabetes.csv')# to read the data set5
+x=data.iloc[:,0:-1].values #-1 is the last column but exclusive and convert the pandas to numpy
+y=list(data.iloc[:,-1]) #type string
+y_int=[]
+for s in y:
+    if s=='positive':
+        y_int.append(1)
+    else:
+        y_int.append(0)
+
+y=np.array(y_int,dtype='float64') #converting it to numpy array
+
+#all of these feature has a different range of the values so we need to normalize this to bring this in the same range
+#the low value featues will be of no use if we donot normalize
+#we will be doing it using sikitleran library
+sc=StandardScaler()
+x=sc.fit_transform(x) #fit_transform calculating and applying to data set
+# we are actually subtracting the mean and divided by the variance
+# this is standardization
+x=torch.tensor(x)
+y=torch.tensor(y).unsqueeze(1)
+ print(y.shape)
+    print(len(x))
+    print(x.shape)
+#len only give us the vlaue of the first dimension
+class Dataset(Dataset): #creating cusytom data set
+        def __init__(self,x,y):
+            self.x=x
+            self.y=y
+        def __getitem__(self,index):
+            return self.x[index], self.y[index]
+
+        def __len__(self):
+            return len(self.x)
+dataset= Dataset(x,y) #created the object of the class Dataset
+len(dataset)
+train_loader=torch.utils.data.DataLoader(dataset=dataset, batch_size=32,shuffle=True) #load the data to our dataloader for 
+#batch processing and shuffling
+#lets visualize the dataloader
+print("there is {} batches in the dataset".format(len(train_loader)))
+for (x,y) in train_loader:
+    print("for one iteration(batch), there is ")
+    print("Data: {}".format(x.shape))
+    print("Data: {}".format(y.shape))
+    break
+#lets build our neural network
+#we are inheriting from the parent class nn and we want to use all the features and functionality of the the class
+class Model(nn.Module):
+    def __init__(self,input_feature,output_feature):
+        super(Model,self).__init__()
+        #attribute of the neural network
+        self.fc1=nn.Linear(input_feature,5)
+        self.fc2=nn.Linear(5,4)
+        self.fc3=nn.Linear(4,3)
+        self.fc4=nn.Linear(3,1)
+
+#sigmoid activation function for output and hidden layer tanh function
+
+        self.sigmoid=nn.Sigmoid()
+        self.tanh=nn.Tanh()
+
+    def forward(self,x):
+        out=self.fc1(x)
+        out=self.tanh(out)
+        out=self.fc2(out)
+        out=self.tanh(out)
+        out=self.fc3(out)
+        out=self.tanh(out)
+        out=self.fc4(out)
+        out=self.tanh(out)
+        out=self.sigmoid(out)
+        return out
+net=Model(7,1)
+criteria=torch.nn.BCELoss(size_average=True)
+#in Binary cross entropy loss -- the losses are averaged over the obesrvations for each minibatch
+#size_average =true ---losses are averaged over the observations for each minibatch
+# here we are using stoachastic gradient decent with momentum
+optimizer=torch.optim.SGD(net.parameters(),lr=0.1,momentum=0.9)
+#Train the network
+epochs=200
+for epoch in range(200):
+    for inputs,labels in train_loader:
+        inputs=inputs.float()
+        labels=labels.float()
+        #feeding the input and the calling the forward functionabs
+        outputs=net(inputs) #can be also done be net.forward
+        #loss calculation
+        loss= criteria(outputs,labels)
+
+        #clear the the gardient buffer (w <--- w- lr.gradient)
+        # there can be a scenario where the gradient can accumulate
+
+        optimizer.zero_grad()
+        #back propagation
+        loss.backward
+
+        #update weight
+        optimizer.step()
+        
+    #Accursary 
+    output=(outputs>0.5).float()
+    # (output==labels).sum/ output.shape[0]
+    accuracy=(output==labels).float().mean() #we are getting the corresponding equality between the actual and predicted class
+
+#print statictics
+    print("Epoch{}/{},Loss:{:.3f}, Accuracy:{:.3f}".format(epoch+1,epochs,loss,accuracy ))
