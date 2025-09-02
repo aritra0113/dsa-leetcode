@@ -1,0 +1,51 @@
+import java.util.*;
+public class Maze_path {
+    public static void main(String[] args) {
+        
+        //List<String> j=path("",3,3,new ArrayList<>());
+        List<String> y=pathreturn("",3,3);
+        System.out.println(y);
+    }
+
+
+
+    static List<String> path(String p,int r,int c,List<String> list)
+    {
+        if(r==1 && c==1)
+        {
+            list.add(p);
+            return list;
+        }
+        if(r!=1)
+        {
+    List<String> l=path( p+"D",r-1,c,list);
+        }
+         if(c!=1)
+         {
+    List<String> rr=path( p+"R",r,c-1,list);
+
+    }
+    return list;
+    }
+
+    static List<String> pathreturn(String p,int r,int c)
+    {
+        List<String> list=new ArrayList<>();
+        if(r==1 && c==1)
+        {
+            list.add(p);
+            return list;
+        }
+        if(r!=1)
+        {
+    list.addAll(pathreturn( p+"D",r-1,c));
+        }
+         if(c!=1)
+         {
+     list.addAll(pathreturn( p+"R",r,c-1));
+
+    }
+   
+    return list;
+    }
+}
