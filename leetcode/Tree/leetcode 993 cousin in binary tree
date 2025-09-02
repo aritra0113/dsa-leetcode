@@ -1,0 +1,79 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+
+        if(root==null)return false;
+
+        Queue<TreeNode> q=new LinkedList<>();
+        int level=0;
+        int deptx=0;
+        int depty=0;
+        q.add(root);
+
+        while(!q.isEmpty())
+        {
+            int size=q.size();
+
+            for(int i=0;i<size;i++)
+            {
+                TreeNode g=q.poll();
+                if(g.left!=null && g.right!=null)
+               { if(g.left.val==x && g.right.val==y||g.left.val==y && g.right.val==x)
+                    return false;}
+               
+                if(g.left!=null)
+                {
+                    
+                    if(g.left.val==x)
+                    
+                    deptx=level+1;
+                    //System.out.println("deptx"+deptx);}
+                    if(g.left.val==y)
+                   
+                    depty=level+1;
+                    //System.out.println("depty"+depty);}
+                    }
+                if(g.right!=null){
+                    
+                    if(g.right.val==x)
+                    
+                    deptx=level+1;
+                    //System.out.println("deptx"+deptx);}
+                    if(g.right.val==y)
+                   { 
+                    depty=level+1;
+                    //System.out.println("depty"+depty);
+                    }
+                }
+                //System.out.println(deptx+" "+deptx);
+                if(g.left!=null)q.add(g.left);
+                if(g.right!=null)q.add(g.right);
+
+                
+
+                
+            }
+            level++;
+            //System.out.println(deptx+" "+deptx);
+           if(deptx!=0 && depty!=0 && deptx==depty)  return true;
+            
+        }
+        return false;
+       
+        
+    }
+}
