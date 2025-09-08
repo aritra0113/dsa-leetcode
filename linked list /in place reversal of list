@@ -1,0 +1,17 @@
+Node prev=null;
+Node present=head;
+Node next=present.next;
+
+while(present!=null)
+{
+  present.next=prev;
+  prev=present;
+  present=next;
+
+  if(next!=null)
+  {
+    next=next.next;
+  }
+  
+}
+head=prev;
