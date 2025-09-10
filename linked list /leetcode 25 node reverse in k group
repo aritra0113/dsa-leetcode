@@ -1,0 +1,81 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // FIX: remove the field counter (it accumulates across calls)
+    // int count = 0;
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k <= 1) return head;
+
+        ListNode dummy = head;
+        int length = length(dummy);
+
+        int rep = length / k;
+        if (rep == 0) return head;
+
+        boolean firstGroup = true;          // FIX: clearer name
+        ListNode prevGroupTail = null;      // FIX: keep tail to stitch groups
+
+        while (rep > 0) {
+            int i = 0;
+            ListNode groupNext = gettail(dummy, k); // this is the node AFTER the k-block
+            ListNode prev = groupNext;
+            // System.out.println(prev.val); // might be null; avoid NPE
+            ListNode x = groupNext;         // keep as your sentinel
+            ListNode curr = dummy;
+            ListNode n = curr.next;
+
+            // reverse exactly k nodes so the block ends at groupNext
+            while (i < k) {
+                curr.next = prev;
+                prev = curr;
+                curr = n;
+                i++;
+                if (n != x) n = n.next;     // your guard to not step past groupNext
+            }
+
+            // prev is now the new head of this reversed k-block
+            // dummy is the old head -> now the tail of this block
+
+            if (firstGroup) {
+                head = prev;                // FIX: head must point to new block head
+                firstGroup = false;
+            } else {
+                prevGroupTail.next = prev;  // FIX: stitch previous tail to new head
+            }
+
+            prevGroupTail = dummy;          // FIX: old head became the new tail
+            dummy = x;                      // move to next group's first node (groupNext)
+            rep--;
+        }
+
+        return head;
+    }
+
+    // FIX: make count local
+    public int length(ListNode dummy) {
+        int count = 0;
+        while (dummy != null) {
+            dummy = dummy.next;
+            count++;
+        }
+        return count;
+    }
+
+    // NOTE: This returns the (k steps ahead) node -> i.e., groupNext, not the kth node itself.
+    public ListNode gettail(ListNode v, int x) {
+        while (x > 0 && v != null) {  // FIX: null-guard
+            v = v.next;
+            x--;
+        }
+        return v;
+    }
+}
