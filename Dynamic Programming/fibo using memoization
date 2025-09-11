@@ -21,3 +21,6 @@ public class fibodp {
         return A[n]=fibo(n-1,A)+fibo(n-2,A);
     }
 }
+##time complexity =O(n)
+##Space complexity =O(n) --stack space +O(n) --Arrays
+                        
