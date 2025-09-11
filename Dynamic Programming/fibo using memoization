@@ -1,0 +1,23 @@
+import java.util.*;
+public class fibodp {
+
+    public static void main(String[] args) {
+        int n=5;
+        int A[]=new int[n+1];
+        Arrays.fill(A,-1);
+        System.out.println(fibo(n,A));
+
+        
+    }
+
+
+    public static int fibo(int n,int A[])
+    {
+        if(n<2)
+        {
+            return n;
+        }
+        if(A[n]!=-1)return A[n];
+        return A[n]=fibo(n-1,A)+fibo(n-2,A);
+    }
+}
