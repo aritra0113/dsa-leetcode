@@ -1,0 +1,64 @@
+class Solution {
+    public int numIslands(char[][] grid) {
+        
+        int count=0;
+        boolean vis[][]=new boolean[grid.length][grid[0].length];
+
+        for(int r=0;r<grid.length;r++)
+        {
+            for(int c=0;c<grid[0].length;c++)
+            {
+                if(!vis[r][c] && grid[r][c]=='1')
+                   { bfs(vis,grid,r,c);
+                    count++;}
+                else
+                vis[r][c]=true;
+            }
+        }
+        return count;
+    }
+
+    public void bfs(boolean vis[][],char[][] grid ,int r,int c)
+    {
+        Queue<pair> q=new LinkedList<>();
+        q.add(new pair(r,c));
+
+        while(!q.isEmpty())
+        {
+            int size=q.size();
+
+            for(int i=0;i<size;i++)
+            {
+                pair p=q.poll();
+                int rr=p.row;
+                int cc=p.col;
+                if(!vis[rr][cc])
+                {
+                    vis[rr][cc]=true;
+
+                    if(cc!=0 && grid[rr][cc-1]=='1')
+                        q.add(new pair(rr,cc-1));
+                    if(cc!=(grid[0].length-1) && grid[rr][cc+1]=='1')
+                        q.add(new pair(rr,cc+1));
+                    if(rr!=(grid.length-1) && grid[rr+1][cc]=='1')
+                        q.add(new pair(rr+1,cc));
+                    if(rr!=0 && grid[rr-1][cc]=='1')
+                        q.add(new pair(rr-1,cc));
+                }
+            }
+        }
+
+    }
+
+    public class pair
+    {
+        int row;
+        int col;
+        
+        pair(int row,int col)
+        {
+            this.row=row;
+            this.col=col;
+        }
+    }
+}
