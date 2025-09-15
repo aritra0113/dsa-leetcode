@@ -1,0 +1,70 @@
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+
+        int t=image[sr][sc];
+
+        boolean vis[][]=new boolean[image.length][image[0].length];
+
+        
+                    bfs(vis,image,sr,sc,color,t);
+                
+        return image;
+    }
+
+    public void bfs(boolean vis[][],int[][] image ,int r,int c,int color,int t)
+    {
+        Queue<pair> q=new LinkedList<>();
+        q.add(new pair(r,c));
+        image[r][c]=color;
+
+        while(!q.isEmpty())
+        {
+            int size=q.size();
+
+            for(int i=0;i<size;i++)
+            {
+                pair p=q.poll();
+                int rr=p.row;
+                int cc=p.col;
+                if(!vis[rr][cc])
+                {
+                    vis[rr][cc]=true;
+
+                    if(cc!=0 && image[rr][cc-1]==t)
+                       { q.add(new pair(rr,cc-1));
+                        image[rr][cc-1]=color;
+                        }
+                    if(cc!=(image[0].length-1) && image[rr][cc+1]==t)
+
+                        {q.add(new pair(rr,cc+1));
+                        image[rr][cc+1]=color;}
+                        
+                    if(rr!=(image.length-1) && image[rr+1][cc]==t)
+
+                        {q.add(new pair(rr+1,cc));
+                        image[rr+1][cc]=color;}
+
+                    if(rr!=0 && image[rr-1][cc]==t)
+
+                        {q.add(new pair(rr-1,cc));
+                        image[rr-1][cc]=color;}
+                }
+            }
+        }
+
+    }
+        
+    
+
+    public class pair
+    {
+        int row;
+        int col;
+
+        pair(int row,int col)
+        {
+            this.row=row;
+            this.col=col;
+        }
+    }
+}
