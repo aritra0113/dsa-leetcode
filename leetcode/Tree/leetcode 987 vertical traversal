@@ -1,0 +1,69 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> list = new ArrayList<>();
+
+        // min-heap: sort by col, then row, then node value
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> {
+            if (a.col != b.col) return Integer.compare(a.col, b.col);
+            if (a.row != b.row) return Integer.compare(a.row, b.row);
+            return Integer.compare(a.node, b.node);
+        });
+
+        // DFS to collect all nodes with row/col
+        collectNodes(root, 0, 0, pq);
+
+        int prevCol = Integer.MIN_VALUE;
+        List<Integer> level = new ArrayList<>();
+
+        while (!pq.isEmpty()) {
+            Pair p = pq.poll();
+
+            if (p.col != prevCol) {
+                if (!level.isEmpty()) list.add(level);
+                level = new ArrayList<>();
+                prevCol = p.col;
+            }
+
+            level.add(p.node);
+        }
+
+        // Add last collected column
+        if (!level.isEmpty()) list.add(level);
+
+        return list;
+    }
+
+    private void collectNodes(TreeNode node, int row, int col, PriorityQueue<Pair> pq) {
+        if (node == null) return;
+
+        pq.add(new Pair(node.val, row, col));
+
+        collectNodes(node.left, row + 1, col - 1, pq);
+        collectNodes(node.right, row + 1, col + 1, pq);
+    }
+
+    static class Pair {
+        int node, row, col;
+
+        Pair(int node, int row, int col) {
+            this.node = node;
+            this.row = row;
+            this.col = col;
+        }
+    }
+}
