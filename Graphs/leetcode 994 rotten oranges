@@ -1,0 +1,87 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int tm=0;
+
+        boolean vis[][]=new boolean[grid.length][grid[0].length];
+
+        Queue<track> q=new LinkedList<>();
+
+        //getting all the starting points of rotten oranges
+        for(int r=0;r<grid.length;r++)
+        {
+            for(int c=0;c<grid[0].length;c++)
+            {
+                if(grid[r][c]==2)
+               { vis[r][c]=true;
+                q.add(new track(r,c,0));}
+            }
+        }
+
+        while(!q.isEmpty())
+        {
+            int size=q.size();
+
+            for(int i=0;i<size;i++)
+            {
+                track p=q.poll();
+                int rr=p.row;
+                int cc=p.col;
+                int t=p.time;
+                 tm=Math.max(t,tm);
+
+                if(rr!=0 && !vis[rr-1][cc] && grid[rr-1][cc]==1 )
+                {q.add(new track(rr-1,cc,t+1));
+                grid[rr-1][cc]=2;
+                vis[rr-1][cc]=true;}
+
+                if(rr!=grid.length-1 && !vis[rr+1][cc] && grid[rr+1][cc]==1 )
+                {q.add(new track(rr+1,cc,t+1));
+                grid[rr+1][cc]=2;
+                vis[rr+1][cc]=true;
+                }
+
+                if(cc!=0 && !vis[rr][cc-1] && grid[rr][cc-1]==1 )
+                {q.add(new track(rr,cc-1,t+1));
+                grid[rr][cc-1]=2;
+                vis[rr][cc-1]=true;}
+
+                if(cc!=grid[0].length-1 && !vis[rr][cc+1] && grid[rr][cc+1]==1 )
+                {q.add(new track(rr,cc+1,t+1));
+                grid[rr][cc+1]=2;
+                vis[rr][cc+1]=true;
+                }
+
+               
+            }
+
+        }
+
+        for(int r=0;r<grid.length;r++)
+        {
+            for(int c=0;c<grid[0].length;c++)
+            {
+                if(grid[r][c]==1)
+                    return -1;
+            }
+        }
+        return tm;
+
+
+        
+    }
+
+    public class track
+    {
+        int row;
+        int col;
+        int time;
+
+        track(int row,int col,int time)
+        {
+            this.row=row;
+            this.col=col;
+            this.time=time;
+
+        }
+    }
+}
