@@ -1,0 +1,44 @@
+import java.util.*;
+public class array_subset {
+
+    public static void main(String[] args) {
+        int[] arr={1,3,5};
+        List<List<Integer>> ans=subset(arr);
+        /* for(List<Integer> list :ans)
+        {
+            System.out.println(list);
+        } */
+
+    
+    }
+
+    static List<List<Integer>> subset(int[] arr)
+    {
+        List<List<Integer>> o=new ArrayList<>();
+        o.add(new ArrayList<>());
+
+        for(int num:arr)
+        {
+            int n=o.size();
+           //System.out.println(n);
+            for(int i=0;i<n;i++)
+            {
+                List<Integer> inr= new ArrayList<>(o.get(i));//creates an independent list whose elements are o.get(i)
+                System.out.print(inr+" ");
+                inr.add(num);
+                o.add(inr);
+
+                /* for(List<Integer> list :o)
+        {
+            System.out.print(list+" ");
+        }*/
+       
+
+            }
+             System.out.println(); 
+        }
+       // System.out.println(o);
+        return o;
+    }
+
+}
