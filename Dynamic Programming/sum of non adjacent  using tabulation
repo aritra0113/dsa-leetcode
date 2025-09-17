@@ -1,0 +1,18 @@
+class Solution {
+    int findMaxSum(int arr[]) {
+        // code here
+        int n=arr.length;
+        int dp[]=new int[n];
+        Arrays.fill(dp,-1);
+        
+      dp[0]=arr[0];
+      
+      for(int i=1;i<n;i++)
+      {
+          int pick =(i>1)?arr[i]+dp[i-2]:arr[i];
+          int nopick=0+dp[i-1];
+          
+          dp[i]=Math.max(pick,nopick);
+      }
+      return dp[n-1];
+    }  
