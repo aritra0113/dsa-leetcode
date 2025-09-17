@@ -1,0 +1,24 @@
+class Solution {
+    int findMaxSum(int arr[]) {
+        // code here
+        int n=arr.length;
+        int dp[]=new int[n];
+        Arrays.fill(dp,-1);
+        
+        return findMaxSum(n-1,arr,dp);
+    }
+    
+    public int findMaxSum(int n,int arr[],int dp[])
+    {
+        
+        if(n==0)return arr[0];
+        
+        if(n<0)return 0;
+        
+        if(dp[n]!=-1) return dp[n];
+        
+            int pick=arr[n]+findMaxSum(n-2,arr,dp);
+            int nopick=0+findMaxSum(n-1,arr,dp);
+             return dp[n]=Math.max(pick,nopick);
+    }
+}
