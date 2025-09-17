@@ -1,0 +1,61 @@
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+
+        int [][] ans = new int[mat.length][mat[0].length];
+        for (int i = 0; i < ans.length; i++) {
+            Arrays.fill(ans[i], Integer.MAX_VALUE);
+        }
+
+        Queue<pair> q = new LinkedList<>();
+
+        // Step 1: Enqueue all zeros
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                if (mat[i][j] == 0) {
+                    ans[i][j] = 0;
+                    q.add(new pair(i, j, 0));
+                }
+            }
+        }
+
+        // Step 2: BFS from all zeros
+        while (!q.isEmpty()) {
+            pair p = q.poll();
+
+            int rr = p.row;
+            int cc = p.col;
+            int t = p.step;
+
+            // 4 directions
+            if (rr > 0 && ans[rr-1][cc] > t+1) {
+                ans[rr-1][cc] = t+1;
+                q.add(new pair(rr-1, cc, t+1));
+            }
+            if (rr < mat.length-1 && ans[rr+1][cc] > t+1) {
+                ans[rr+1][cc] = t+1;
+                q.add(new pair(rr+1, cc, t+1));
+            }
+            if (cc > 0 && ans[rr][cc-1] > t+1) {
+                ans[rr][cc-1] = t+1;
+                q.add(new pair(rr, cc-1, t+1));
+            }
+            if (cc < mat[0].length-1 && ans[rr][cc+1] > t+1) {
+                ans[rr][cc+1] = t+1;
+                q.add(new pair(rr, cc+1, t+1));
+            }
+        }
+
+        return ans;
+    }
+
+    class pair {
+        int row;
+        int col;
+        int step;
+        pair(int row, int col, int step) {
+            this.row = row;
+            this.col = col;
+            this.step = step;
+        }
+    }
+}
