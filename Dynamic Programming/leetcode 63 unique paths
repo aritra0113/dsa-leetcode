@@ -1,0 +1,30 @@
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+
+        int m=obstacleGrid.length;
+        int n=obstacleGrid[0].length;
+        int dp[][]=new int[m][n];
+
+        for(int i=0;i<obstacleGrid.length;i++)
+        {
+            Arrays.fill(dp[i],-1);
+        }
+        //System.out.println(m-1+" "+ (n-1));
+        return count(obstacleGrid,dp,0,0);
+        
+    }
+    public int count(int[][] obstacleGrid,int[][] dp,int m,int n)
+    {
+        //System.out.println(m+" "+ n);
+        if(m>obstacleGrid.length-1 ||n>obstacleGrid[0].length-1||obstacleGrid[m][n]==1) return 0;
+        if(m==obstacleGrid.length-1 && n==obstacleGrid[0].length-1)  return 1;
+        
+        
+        
+        
+
+        if(dp[m][n]!=-1)return dp[m][n];
+
+        return dp[m][n]=count(obstacleGrid,dp,m+1,n)+count(obstacleGrid,dp,m,n+1);
+    }
+}
