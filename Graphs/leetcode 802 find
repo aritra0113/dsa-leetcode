@@ -1,0 +1,50 @@
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        List<Integer> list = new ArrayList<>();
+        int n = graph.length;
+        boolean[] vis = new boolean[n];   // node processed/visited
+        boolean[] rec = new boolean[n];   // on current recursion stack
+        boolean[] safe = new boolean[n];  // true if node is safe
+
+        // run DFS from every node (so every connected component is covered)
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) f(graph, i, vis, rec, safe);
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (safe[i]) list.add(i);
+        }
+
+        Collections.sort(list);
+        return list;
+    }
+
+    // DFS that fills vis, rec and safe arrays.
+    // After this call, safe[node] will be true if node is eventual safe.
+    public void f(int[][] graph, int node, boolean[] vis, boolean[] rec, boolean[] safe) {
+        if (vis[node]) return; // already processed
+
+        vis[node] = true;
+        rec[node] = true;
+        boolean flag = true; // assume safe until we find otherwise
+
+        for (int nei : graph[node]) {
+            if (!vis[nei]) {
+                f(graph, nei, vis, rec, safe);
+            }
+            // If neighbor is on recursion stack -> cycle reachable => not safe
+            if (rec[nei]) {
+                flag = false;
+                break;
+            }
+            // If neighbor was processed and is not safe => current not safe
+            if (!safe[nei]) {
+                flag = false;
+                break;
+            }
+        }
+
+        rec[node] = false;   // remove from recursion stack
+        safe[node] = flag;   // record whether this node is safe
+    }
+}
