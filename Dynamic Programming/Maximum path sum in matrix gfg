@@ -1,0 +1,54 @@
+// User function Template for Java
+class Solution {
+    int sum=0;
+    int max=0;
+    public int maximumPath(int[][] mat) {
+        // code here
+        
+    int r=mat.length;
+    int c=mat[0].length;
+    int dp[][]=new int[r][c];
+    
+    for(int i=0;i<r;i++)
+    {
+        Arrays.fill(dp[i],-1);
+    }
+    for(int i=0;i<dp[0].length;i++)
+        {
+    
+            sum=helper(dp,0,i,mat);
+            max=Math.max(sum,max);
+    
+    }
+    return max;
+    }
+    
+    public int helper(int[][] dp,int r,int c,int[][] mat)
+    {
+        
+        if(r>dp.length-1 || c>dp[0].length-1 ||r<0||c<0)
+        return 0;
+       
+       if(r==dp.length-1)
+       { dp[r][c]=mat[r][c];
+        return dp[r][c];
+        }
+       
+       if(dp[r][c]!=-1)return dp[r][c];
+       
+            
+           int down=helper(dp,r+1,c,mat);
+           
+          
+           int left=helper(dp,r+1,c-1,mat);
+           
+           
+           int right=helper(dp,r+1,c+1,mat);
+           
+           
+           return dp[r][c]=mat[r][c]+Math.max(left,Math.max(down,right));
+           
+           
+        
+    }
+}
