@@ -1,0 +1,89 @@
+
+
+class Solution {
+
+    public int[] shortestPath(int v, int e, int[][] edges) {
+        
+        // 1. Build the graph and calculate in-degrees
+        ArrayList<pair>[] graph = new ArrayList[v];
+        int[] indegree = new int[v];
+        for (int i = 0; i < v; i++) {
+            graph[i] = new ArrayList<pair>();
+        }
+
+        for (int[] edge : edges) {
+            // A robust check for malformed edges
+            if (edge.length < 3) continue;
+            
+            int u = edge[0];
+            int x = edge[1];
+            int w = edge[2];
+            
+            graph[u].add(new pair(x, w));
+            indegree[x]++;
+        }
+
+        // 2. Perform Kahn's Topological Sort
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < v; i++) {
+            if (indegree[i] == 0) {
+                q.add(i);
+            }
+        }
+        
+        List<Integer> topoOrder = new ArrayList<>();
+        while (!q.isEmpty()) {
+            int p = q.poll();
+            topoOrder.add(p);
+            
+            for (pair j : graph[p]) {
+                int t = j.vertex;
+                indegree[t]--;
+                
+                if (indegree[t] == 0) {
+                    q.add(t);
+                }
+            }
+        }
+        
+        // 3. Calculate shortest paths using the topological order
+        int[] dist = new int[v];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[0] = 0; // Source vertex is 0
+
+        for (int u : topoOrder) {
+            // Process only if the node is reachable
+            if (dist[u] != Integer.MAX_VALUE) {
+                for (pair neighbor : graph[u]) {
+                    int neighborVertex = neighbor.vertex;
+                    int weight = neighbor.weight;
+                    
+                    // Relax the edge
+                    if (dist[u] + weight < dist[neighborVertex]) {
+                        dist[neighborVertex] = dist[u] + weight;
+                    }
+                }
+            }
+        }
+        
+        // 4. Finalize the output: mark unreachable vertices as -1
+        for (int i = 0; i < v; i++) {
+            if (dist[i] == Integer.MAX_VALUE) {
+                dist[i] = -1;
+            }
+        }
+        
+        return dist;
+    }
+    
+    // Helper class for storing neighbors and weights
+    class pair {
+        int vertex;
+        int weight;
+        
+        pair(int vertex, int weight) {
+            this.vertex = vertex;
+            this.weight = weight;
+        }
+    }
+}
