@@ -1,0 +1,32 @@
+class Solution {
+    static int knapsack(int w, int val[], int wt[]) {
+        
+        //memoization
+        
+        // code here
+        
+        int ind=val.length;
+        int dp[][]=new int [ind][w+1];
+        for(int i=0;i<ind;i++)
+        {
+            Arrays.fill(dp[i],-1);
+        }
+        return f(ind-1,val,wt,w,dp);
+    }
+    public static int f(int n,int []val,int []wt,int w,int [][]dp)
+    {
+        if(n==0)
+        {
+            if(wt[0]<=w)return val[0];
+            else 
+            return 0;
+        }
+        
+        if(dp[n][w]!=-1)return dp[n][w];
+        int nopick=0+f(n-1,val,wt,w,dp);
+        int pick =Integer.MIN_VALUE;
+        if(wt[n]<=w)
+        pick=val[n]+f(n-1,val,wt,w-wt[n],dp);
+        return dp[n][w]= Math.max(pick,nopick);
+    }
+}
