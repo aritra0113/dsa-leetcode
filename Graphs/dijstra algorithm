@@ -1,0 +1,70 @@
+class Solution {
+    public int[] dijkstra(int v, int[][] edges, int src) {
+        // code here
+        //using priority queue mean heap
+        //System.out.println(edges.length);
+      //cannot be implemented with graphs negative weights as it will go to infinite loops
+      // priorityQueue is faster than normal queue but set is the fastest 
+      //lecture number G-32 -33 take you fowrard 
+      //time complexity =ElogV 
+        int dis[]=new int[v];
+        Arrays.fill(dis,Integer.MAX_VALUE);
+        dis[src]=0;
+        ArrayList<pair> graph[]=new ArrayList[v];
+        
+        for(int i=0;i<v;i++)
+        {
+            graph[i]=new ArrayList<pair>();
+        }
+        
+        for(int j[]:edges)
+        {
+            if(j.length<3)
+            continue;
+            
+            int u=j[0];
+            int x=j[1];
+            int w=j[2];
+            
+            graph[u].add(new pair(w,x));
+        }
+        
+        PriorityQueue<pair> q=new PriorityQueue<pair>((a,b)->{
+            if(a.dist!=b.dist) return Integer.compare(a.dist,b.dist) ;
+             return Integer.compare(a.node,b.node) ;
+        });
+        q.add(new pair(0,src));
+        
+        while(!q.isEmpty())
+        {
+            pair p=q.poll();
+            
+            int d=p.dist;
+            int n=p.node;
+            
+            for(pair j:graph[n])
+            {
+                int wt=j.dist;
+                int x=j.node;
+                if(dis[n]+wt<dis[x])
+                {
+                    dis[x]=dis[n]+wt;
+                    q.add(new pair(dis[x],x));
+                }
+            }
+        }
+        return dis;
+    }
+    
+    class pair
+    {
+        int dist;
+        int node;
+        
+        pair(int dist,int node)
+        {
+            this.dist=dist;
+            this.node=node;
+        }
+    }
+}
