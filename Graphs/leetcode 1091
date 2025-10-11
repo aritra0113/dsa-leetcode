@@ -1,0 +1,94 @@
+//Shortest path in the binary matrix
+
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+             if(grid[0][0]!=0) return -1;
+        int ans[][]=new int[grid.length][grid[0].length];
+        for(int i=0;i<ans.length;i++)
+        {
+            Arrays.fill(ans[i],Integer.MAX_VALUE);
+        }
+
+        ans[0][0]=1;
+
+        Queue<Trio> q=new LinkedList<>();
+       
+        q.add(new Trio(1,0,0));
+
+        while(!q.isEmpty())
+        {
+            Trio p=q.poll();
+            int d=p.dist;
+            int r=p.row;
+            int c=p.col;
+
+            if(c>0 && grid[r][c-1]==0 )//left
+            {
+
+                if(d+1<ans[r][c-1])
+               { ans[r][c-1]=d+1;
+                q.add(new Trio(d+1,r,c-1));}
+            }
+            if(c<ans[0].length-1 && grid[r][c+1]==0)//right
+            {
+                if(d+1<ans[r][c+1])
+                {ans[r][c+1]=d+1;
+                q.add(new Trio(d+1,r,c+1));}
+            }
+            if(r>0 && grid[r-1][c]==0)//up
+            {
+                if(d+1<ans[r-1][c])
+                {ans[r-1][c]=d+1;
+                q.add(new Trio(d+1,r-1,c));}
+            }
+            if(r<ans.length-1 && grid[r+1][c]==0)//down
+            {
+                if(d+1<ans[r+1][c])
+                {ans[r+1][c]=d+1;
+                q.add(new Trio(d+1,r+1,c));}
+            }
+            if(c>0 && r<ans.length-1 && grid[r+1][c-1]==0 ) // dwn left diag
+            {
+                if(d+1<ans[r+1][c-1])
+               { ans[r+1][c-1]=d+1;
+                q.add(new Trio(d+1,r+1,c-1));}
+            }
+            if(c<ans[0].length-1 && r<ans.length-1 && grid[r+1][c+1]==0 ) // dwn right diag
+            {
+                if(d+1<ans[r+1][c+1])
+                {ans[r+1][c+1]=d+1;
+                q.add(new Trio(d+1,r+1,c+1));}
+            }
+
+            if(c<ans[0].length-1 && r>0 && grid[r-1][c+1]==0) //up right diag
+            {
+                if(d+1<ans[r-1][c+1])
+               { ans[r-1][c+1]=d+1;
+                q.add(new Trio(d+1,r-1,c+1));}
+            }
+            if(c>0 && r>0 && grid[r-1][c-1]==0) //up left diag
+            {
+                if(d+1<ans[r-1][c-1])
+               { ans[r-1][c-1]=d+1;
+                q.add(new Trio(d+1,r-1,c-1));}
+            }
+        }
+        if(ans[grid.length-1][grid[0].length-1]==Integer.MAX_VALUE)return -1;
+        return ans[grid.length-1][grid[0].length-1];
+
+        
+    }
+    class Trio
+    {
+        int dist;
+        int row;
+        int col;
+
+        Trio(int dist,int row,int col )
+        {
+            this.dist=dist;
+            this.row=row;
+            this.col=col;
+        }
+    }
+}
