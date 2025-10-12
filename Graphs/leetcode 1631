@@ -1,0 +1,75 @@
+class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        int dp[][]=new int[heights.length][heights[0].length];
+
+        for(int i=0;i<heights.length;i++)
+        {
+            Arrays.fill(dp[i],Integer.MAX_VALUE);
+        }
+        dp[0][0]=0;
+
+        PriorityQueue<int []> q=new PriorityQueue<>((a,b)->a[0]-b[0]);
+        q.add(new int[]{0,0,0});
+        int max=0;
+        int diff=0;
+        while(!q.isEmpty())
+        {
+            int p[]=q.poll();
+
+            int past=p[0];
+            int r=p[1];
+            int c=p[2];
+            if(r>0)
+            {
+                
+                 diff=Math.abs(heights[r-1][c]-heights[r][c]);
+                  //take the previous effort
+                  max=Math.max(past,diff);
+                 if(max<dp[r-1][c])
+                 {dp[r-1][c]=max;
+                 q.add(new int[]{max,r-1,c});}
+
+                 
+            }
+            if(r<dp.length-1)
+            {
+                
+                 diff=Math.abs(heights[r+1][c]-heights[r][c]);
+                  //take the previous effort
+                  max=Math.max(past,diff);
+                 if(max<dp[r+1][c])
+                 {dp[r+1][c]=max;
+                 q.add(new int[]{max,r+1,c});}
+
+                 
+            }
+            if(c>0)
+            {
+                
+                 diff=Math.abs(heights[r][c-1]-heights[r][c]);
+                  //take the previous effort
+                  max=Math.max(past,diff);
+                 if(max<dp[r][c-1])
+                 {dp[r][c-1]=max;
+                 q.add(new int[]{max,r,c-1});}
+
+                 
+            }
+            if(c<dp[0].length-1)
+            {
+                
+                 diff=Math.abs(heights[r][c+1]-heights[r][c]);
+                  //take the previous effort
+                  max=Math.max(past,diff);
+                 if(max<dp[r][c+1])
+                 {dp[r][c+1]=max;
+                 q.add(new int[]{max,r,c+1});}
+
+                 
+            }
+        }
+        return dp[heights.length-1][heights[0].length-1];
+
+    }
+   
+}
