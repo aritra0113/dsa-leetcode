@@ -1,0 +1,73 @@
+//Given a rod of length n inches and an array price[], where price[i] denotes the value of a piece of length i.
+Your task is to determine the maximum value obtainable by cutting up the rod and selling the pieces.
+
+Note: n = size of price, and price[] is 1-indexed array.
+//rod cutting problem using recurrsion
+class Solution {
+    public int cutRod(int[] price) {
+        // code here
+        int n=price.length;
+        return f(n,price,n);
+    }
+    public int f(int n,int []price,int target)
+    {
+        if(target==0) return 0;
+        if(n<1)return 0;
+        
+        int notake=f(n-1,price,target);
+        int take =Integer.MIN_VALUE;
+        if(n<=target)
+        take=price[n-1]+f(n,price,target-n);
+        return Math.max(take,notake);
+        
+    }
+}
+//using memoization
+
+class Solution {
+    public int cutRod(int[] price) {
+        // code here
+        int n=price.length;
+        int dp[][]=new int [n+1][n+1];
+        for(int i=0;i<=n;i++)
+        {
+            Arrays.fill(dp[i],-1);
+        }
+        return f(n,price,n,dp);
+    }
+    public int f(int n,int []price,int target,int [][] dp)
+    {
+        if(target==0) return 0;
+        if(n<1)return 0;
+        
+        if(dp[n][target]!=-1)return dp[n][target];
+        int notake=f(n-1,price,target,dp);
+        int take =Integer.MIN_VALUE;
+        if(n<=target)
+        take=price[n-1]+f(n,price,target-n,dp);
+        return dp[n][target]=Math.max(take,notake);
+        
+    }
+}
+//1D space optimization
+class Solution {
+    public int cutRod(int[] price) {
+        int n = price.length;
+        // dp[j] will store the maximum price for a rod of length j
+        int[] dp = new int[n + 1];
+
+        // Loop through each piece type (from length 1 to n)
+        for (int i = 1; i <= n; i++) {
+            // Loop through all rod lengths that can accommodate the current piece
+            for (int j = i; j <= n; j++) {
+                
+                // price[i-1] is the price of the piece of length 'i'
+                // dp[j] on the right side holds the max price for length j WITHOUT using the current piece 'i'.
+                // price[i-1] + dp[j-i] is the price if we decide to TAKE the current piece 'i'.
+                dp[j] = Math.max(dp[j], price[i - 1] + dp[j - i]);
+            }
+        }
+
+        return dp[n];
+    }
+}
