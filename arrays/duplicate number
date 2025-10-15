@@ -1,0 +1,49 @@
+public class duplicate_number {
+
+     public static void main(String[] args) {
+
+        int arr[]={3,1,3,4,2};
+        sort(arr);
+       int d= missing(arr);
+       System.out.println(d);
+        
+    }
+
+
+    public static void sort(int[] arr)
+    {
+        int i=0;
+        while(i<arr.length)
+        {
+            int correct=arr[i]-1;
+            
+            if(arr[i]!=arr[correct] )
+                swap(arr,i,correct);
+            else
+            i++;
+        }
+    }
+    public static void swap(int[] arr,int i,int correct_index)
+   {
+    int temp=arr[correct_index];
+    arr[correct_index]=arr[i];
+    arr[i]=temp;
+   }
+   public static int missing(int[] arr)
+   {
+    int i=0;
+    while(i<arr.length)
+    {
+        if(arr[i]!=i+1)
+        {
+       
+        break;
+        }
+       else
+         i++;
+
+    }
+    return arr[i];
+   }
+
+}
