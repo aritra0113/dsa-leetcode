@@ -1,0 +1,31 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+
+        boolean arr[]=new boolean[nums.length];
+
+        arr[arr.length-1]=true;
+        int i=arr.length-2;
+        while(i>=0)
+        {
+            if(i+nums[i]>=arr.length-1 || arr[i+nums[i]]==true)
+            arr[i]=true;
+            else if(arr[i+nums[i]]==false)
+            {   
+                int k=i+nums[i];
+                while(k>0)
+                {
+                    if(arr[k]==true)
+                     arr[i]=true;
+                     k--;
+                }
+               
+            }
+            else
+            arr[i]=false;
+            
+            i--;
+        }
+    return arr[0];
+        
+    }
+}
