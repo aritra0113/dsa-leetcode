@@ -1,0 +1,62 @@
+
+
+class Solution {
+
+    // Using a simple int array for the tuple for performance
+    // {cost, city, stops}
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+       
+        ArrayList<ArrayList<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] flight : flights) {
+            
+            graph.get(flight[0]).add(new int[]{flight[1], flight[2]});
+        }
+
+        int dist[]=new int[n];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        dist[src]=0;
+        Queue<int[]> q=new LinkedList<>();
+       
+
+        // 3. Start the search
+        q.add(new int[]{0, src, 0}); // {cost=0, city=src, stops=0}
+       
+        int c=-1;
+
+
+        while(!q.isEmpty()) {
+            int[] current = q.poll();
+            int cost = current[0];
+            int city = current[1];
+            int stops = current[2];
+
+            // If we've reached the destination, this is the cheapest path.
+            if (city == dst  && stops<=k+1) {
+                c=cost;
+            }
+
+            // If we have used too many stops, this path is invalid.
+            if (stops > k+1) {
+                continue;
+            }
+
+            // Explore all flights from the current city
+            for (int[] neighbor : graph.get(city)) {
+                int nextCity = neighbor[0];
+                int flightPrice = neighbor[1];
+                
+                 
+                if (stops <k+1  && flightPrice+cost<dist[nextCity] && city!=dst) {
+                    dist[nextCity]=flightPrice+cost;
+                    
+                    q.add(new int[]{cost + flightPrice, nextCity, stops + 1});
+                }
+            }
+        }
+
+        return c; // Destination is unreachable
+    }
+}
