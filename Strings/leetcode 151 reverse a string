@@ -1,0 +1,25 @@
+class Solution {
+    public String reverseWords(String s) {
+         s=s.trim();
+       
+        
+        // 2. Split the string by one or more spaces
+        // Example: "the   sky is blue" becomes ["the", "sky", "is", "blue"]
+        String[] words = s.split("\s+");
+        
+        // 3. Use StringBuilder for efficient string concatenation
+        StringBuilder reversed = new StringBuilder();
+        
+        // 4. Loop through the array in reverse order
+        for (int i = words.length - 1; i >= 0; i--) {
+            
+            // 5. Append the word and a space
+            reversed.append(words[i]).append(" ");
+        }
+        
+        // 6. Convert to string and trim the final trailing space
+        // Example: "blue is sky the " becomes "blue is sky the"
+        return reversed.toString().trim();
+        
+    }
+}
