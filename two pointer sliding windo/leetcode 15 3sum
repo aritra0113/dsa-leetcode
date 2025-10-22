@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        
+        // A triplet is impossible with fewer than 3 elements.
+        if (nums == null || nums.length < 3) {
+            return ans;
+        }
+
+        // 1. Sort the array. This is O(n log n) and is key to the solution.
+        Arrays.sort(nums);
+
+        // 2. Iterate with the first pointer 'i'
+        // We only need to go up to length - 2 to leave room for 'left' and 'right'.
+        for (int i = 0; i < nums.length - 2; i++) {
+            
+            // 3. Skip duplicate 'i' values.
+            // If i > 0 (not the first element) and this element is the same
+            // as the one before it, we've already processed all triplets
+            // starting with this number.
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            // 4. Set up two pointers
+            int left = i + 1;
+            int right = nums.length - 1;
+
+            // 5. Run the two-pointer search (O(n) for each 'i', making this O(n^2))
+            while (left < right) {
+                int sum = nums[i] + nums[left] + nums[right];
+
+                if (sum == 0) {
+                    // Found a triplet!
+                    ans.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+                    // 6. Skip duplicates for 'left' and 'right' pointers
+                    // Move 'left' forward as long as it's the same as the next element
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    // Move 'right' backward as long as it's the same as the previous element
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+
+                    // Move both pointers inward to find the next unique pair
+                    left++;
+                    right--;
+                    
+                } else if (sum < 0) {
+                    // Sum is too small, need a larger number.
+                    left++;
+                } else { // sum > 0
+                    // Sum is too large, need a smaller number.
+                    right--;
+                }
+            }
+        }
+
+        return ans;
+    }
+}
