@@ -1,0 +1,50 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        Queue<TreeNode> pq=new LinkedList<>();
+         if(p==null && q==null)return true;
+        if(p==null ||q==null)return false;
+       
+        pq.add(q);
+        pq.add(p);
+
+        while(!pq.isEmpty())
+        {
+            
+            TreeNode o=pq.poll();
+            TreeNode u=pq.poll();
+
+            if(o.val!=u.val )
+            return false;
+
+            if(o.left!=null && u.left!=null)
+           { pq.add(o.left);
+            pq.add(u.left);}
+              if((o.left==null && u.left!=null)||(o.left!=null && u.left==null) )
+             return false;
+            if(o.right!=null && u.right!=null)
+           { pq.add(o.right);
+            pq.add(u.right);}
+         if((o.right==null && u.right!=null)||(o.right!=null && u.right==null))
+            return false;
+
+
+        }
+        return true;
+        
+    }
+}
