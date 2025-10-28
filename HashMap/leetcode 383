@@ -1,0 +1,26 @@
+ class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+
+       // if(ransomNote.length()==0||magazine.length()==0)return false;
+        Map<Character,Integer> m=new HashMap<>();
+        
+        for(char d:magazine.toCharArray())
+        {
+          m.put(d,  m.getOrDefault(d,0)+1);//this fuctions captures the frequency of the chracter
+        }
+         
+        
+         for(char d:ransomNote.toCharArray())
+         {
+            int x=m.getOrDefault(d,0)-1;
+
+            if(x<0)
+            return false;
+            //System.out.println(x);
+           m.put(d,x);
+         }
+         return true;
+
+        
+    }
+}
