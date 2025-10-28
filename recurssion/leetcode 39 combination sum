@@ -1,0 +1,28 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+
+        List<List<Integer>> ans=new ArrayList<>();
+        List<Integer> dum=new ArrayList<>();
+
+        f(candidates.length-1,ans,dum,candidates,target);
+        return ans;
+        
+    }
+    public void f(int n,List<List<Integer>> ans,List<Integer> dum,int[] candidates,int t)
+
+    {
+        if(n<0)return;
+    if(t==0)
+    {
+        ans.add(new ArrayList<>(dum));
+        return;
+    }
+    f(n-1,ans,dum,candidates,t);
+    if(candidates[n]<=t)
+    {dum.add(candidates[n]);
+    //System.out.println(dum);
+    f(n,ans,dum,candidates,t-candidates[n]);
+    dum.remove(dum.size()-1);}
+    return;
+    }
+}
