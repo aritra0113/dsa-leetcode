@@ -1,0 +1,43 @@
+class Solution {
+    int c=0;
+    public List<List<Integer>> permuteUnique(int[] nums) {
+
+        String s=Arrays.toString(nums);
+        List<List<Integer>> ans=new ArrayList<>();
+        List<Integer> dum=new ArrayList<>();
+        boolean map[]=new boolean[nums.length];
+
+       Map<Integer,List> m=new HashMap<>();
+       f(m,dum,nums,map);
+     //System.out.println(m);
+      
+        for(int i=0;i<m.size();i++)
+        {
+            ans.add(m.get(i));
+        }
+    return ans;
+        
+    }
+    public void f (Map<Integer,List> m,List<Integer> dum,int[] nums,boolean []map)
+    {
+        if(dum.size()==nums.length)
+       { 
+           if(!m.containsValue(dum))
+            m.put(c++,new ArrayList<>(dum));
+            return;
+       }
+
+        for(int i=0;i<nums.length;i++)
+        {
+            if(!map[i])
+            {
+                map[i]=true;
+                dum.add(nums[i]);
+                f(m,dum,nums,map);
+                dum.remove(dum.size()-1);
+                map[i]=false;
+            }
+        }
+    }
+
+}
