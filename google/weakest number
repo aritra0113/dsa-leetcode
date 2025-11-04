@@ -1,0 +1,26 @@
+import java.util.Arrays;
+class Solution {
+    public int numberOfWeakCharacters(int[][] p) {
+       Arrays.sort(p, (a, b) -> {
+            if (a[0] == b[0]) {
+                // Same attack, sort defense descending
+                return b[1] - a[1];
+            } else {
+                // Different attack, sort attack ascending
+                return a[0] - b[0];
+            }
+        });
+        int dum=Integer.MIN_VALUE;
+        int count=0;
+        for(int i=p.length-1;i>=0;i--)
+        {
+            if(dum>p[i][1])
+            count++;
+            else
+            dum=p[i][1];
+        }
+        return count;
+       
+        
+    }
+}
